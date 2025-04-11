@@ -34,6 +34,7 @@ const GamePage = () => {
         onNewGame={startNewGame}
         attemptsLeft={attemptsLeft}
         gameStatus={gameStatus}
+        targetWord={targetWord}
       />
       
       <main className="flex-1 flex flex-col items-center justify-between max-w-md mx-auto w-full">
@@ -51,13 +52,7 @@ const GamePage = () => {
             evaluations={evaluations}
           />
           
-          {gameStatus === 'lost' && (
-            <Alert className="mt-4 mx-4 bg-red-50 border-red-200">
-              <AlertDescription>
-                Doğru kelime: <span className="font-bold uppercase">{targetWord}</span>
-              </AlertDescription>
-            </Alert>
-          )}
+          {/* Removing this alert since we're now showing the target word in the header */}
         </div>
         
         <div className="w-full mt-auto">
