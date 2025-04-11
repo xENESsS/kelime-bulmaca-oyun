@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Game specific colors
+				"game-correct": "#F2FCE2",      // Soft green for correct letter and position
+				"game-present": "#FEF7CD",      // Soft yellow for correct letter, wrong position
+				"game-absent": "#F1F0FB",       // Soft gray for incorrect letter
+				"game-primary": "#9b87f5",      // Primary purple for design elements
+				"game-light": "#D6BCFA",        // Light purple for accents
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +91,30 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pop': {
+					'0%': { transform: 'scale(0.8)', opacity: '0' },
+					'70%': { transform: 'scale(1.1)', opacity: '1' },
+					'100%': { transform: 'scale(1)', opacity: '1' }
+				},
+				'flip': {
+					'0%': { transform: 'rotateX(0deg)', backgroundColor: 'transparent' },
+					'45%': { transform: 'rotateX(90deg)', backgroundColor: 'transparent' },
+					'55%': { transform: 'rotateX(90deg)' },
+					'100%': { transform: 'rotateX(0deg)' }
+				},
+				'shake': {
+					'0%, 100%': { transform: 'translateX(0)' },
+					'25%': { transform: 'translateX(-5px)' },
+					'75%': { transform: 'translateX(5px)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pop': 'pop 0.3s ease-in-out',
+				'flip': 'flip 0.5s ease-in-out',
+				'shake': 'shake 0.4s ease-in-out'
 			}
 		}
 	},

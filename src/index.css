@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -97,5 +98,29 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+}
+
+/* Custom game styles */
+@layer utilities {
+  .letter-tile {
+    @apply w-12 h-12 md:w-16 md:h-16 flex items-center justify-center border-2 rounded-md font-bold text-2xl uppercase transition-all duration-300;
+  }
+  
+  .letter-correct {
+    @apply bg-game-correct border-green-300 text-green-700;
+  }
+  
+  .letter-present {
+    @apply bg-game-present border-yellow-300 text-yellow-700;
+  }
+  
+  .letter-absent {
+    @apply bg-game-absent border-gray-300 text-gray-500;
+  }
+  
+  .letter-empty {
+    @apply bg-white border-gray-300;
   }
 }
