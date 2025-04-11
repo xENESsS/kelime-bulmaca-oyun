@@ -22,7 +22,8 @@ const GamePage = () => {
     letterStates, 
     gameStatus, 
     error, 
-    evaluations 
+    evaluations,
+    targetWord
   } = gameState;
 
   const attemptsLeft = maxAttempts - attempts.length;
@@ -49,6 +50,14 @@ const GamePage = () => {
             maxAttempts={maxAttempts}
             evaluations={evaluations}
           />
+          
+          {gameStatus === 'lost' && (
+            <Alert className="mt-4 mx-4 bg-red-50 border-red-200">
+              <AlertDescription>
+                Doğru kelime: <span className="font-bold uppercase">{targetWord}</span>
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
         
         <div className="w-full mt-auto">

@@ -16,7 +16,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({
   gameStatus
 }) => {
   return (
-    <header className="p-4 flex justify-between items-center border-b">
+    <header className="p-4 flex flex-col md:flex-row justify-between items-center border-b gap-2">
       <div className="flex items-center">
         <GameInstructions />
       </div>
@@ -26,20 +26,31 @@ const GameHeader: React.FC<GameHeaderProps> = ({
       </h1>
       
       <div className="flex items-center gap-2">
-        {gameStatus !== 'playing' && (
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={onNewGame}
-            className="rounded-full"
-          >
-            <RefreshCw className="h-5 w-5" />
-            <span className="sr-only">Yeni Oyun</span>
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={onNewGame}
+          className="rounded-full"
+        >
+          <RefreshCw className="h-5 w-5" />
+          <span className="sr-only">Yeni Oyun</span>
+        </Button>
+        
         {gameStatus === 'playing' && (
           <div className="text-sm font-medium">
             {attemptsLeft} Hak
+          </div>
+        )}
+        
+        {gameStatus === 'won' && (
+          <div className="text-sm font-medium text-green-600 font-bold">
+            TEBRİKLER KAZANDIN!
+          </div>
+        )}
+        
+        {gameStatus === 'lost' && (
+          <div className="text-sm font-medium text-red-600 font-bold">
+            ÜZGÜNÜM KAYBETTİN!
           </div>
         )}
       </div>

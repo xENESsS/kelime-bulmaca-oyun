@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { getRandomWord, isValidWord } from '../data/words';
 import { toast } from '@/components/ui/use-toast';
@@ -23,20 +22,18 @@ export const useWordGame = () => {
     attempts: [],
     letterStates: {},
     gameStatus: 'playing',
-    maxAttempts: 6,
+    maxAttempts: 5,
     error: null,
     evaluations: [],
   });
 
-  // Initialize the game with a random word
   useEffect(() => {
     startNewGame();
   }, []);
 
-  // Start a new game with a fresh state
   const startNewGame = useCallback(() => {
     const newTargetWord = getRandomWord();
-    console.log('Target word:', newTargetWord); // For debugging
+    console.log('Target word:', newTargetWord);
 
     setGameState({
       targetWord: newTargetWord,
@@ -44,13 +41,12 @@ export const useWordGame = () => {
       attempts: [],
       letterStates: {},
       gameStatus: 'playing',
-      maxAttempts: 6,
+      maxAttempts: 5,
       error: null,
       evaluations: [],
     });
   }, []);
 
-  // Add a character to the current attempt
   const addCharacter = useCallback((char: string) => {
     if (gameState.gameStatus !== 'playing') return;
     if (gameState.currentAttempt.length >= 5) return;
@@ -62,7 +58,6 @@ export const useWordGame = () => {
     }));
   }, [gameState.gameStatus, gameState.currentAttempt]);
 
-  // Remove the last character from the current attempt
   const removeCharacter = useCallback(() => {
     if (gameState.gameStatus !== 'playing') return;
     if (gameState.currentAttempt.length === 0) return;
@@ -74,27 +69,24 @@ export const useWordGame = () => {
     }));
   }, [gameState.gameStatus, gameState.currentAttempt]);
 
-  // Evaluate the current attempt
   const evaluateAttempt = useCallback((attempt: string, targetWord: string): LetterState[] => {
     const result: LetterState[] = Array(5).fill('absent');
     const targetLetters = targetWord.split('');
     const attemptLetters = attempt.split('');
     
-    // First pass: mark correct letters
     for (let i = 0; i < 5; i++) {
       if (attemptLetters[i] === targetLetters[i]) {
         result[i] = 'correct';
-        targetLetters[i] = '#'; // Mark as used
+        targetLetters[i] = '#';
       }
     }
     
-    // Second pass: mark present letters
     for (let i = 0; i < 5; i++) {
       if (result[i] === 'absent') {
         const targetIndex = targetLetters.indexOf(attemptLetters[i]);
         if (targetIndex !== -1) {
           result[i] = 'present';
-          targetLetters[targetIndex] = '#'; // Mark as used
+          targetLetters[targetIndex] = '#';
         }
       }
     }
@@ -102,7 +94,6 @@ export const useWordGame = () => {
     return result;
   }, []);
 
-  // Update keyboard letter states
   const updateLetterStates = useCallback((attempt: string, evaluation: LetterState[]) => {
     setGameState((prev) => {
       const newLetterStates = { ...prev.letterStates };
@@ -111,7 +102,6 @@ export const useWordGame = () => {
         const currentState = newLetterStates[letter];
         const newState = evaluation[index];
         
-        // Only upgrade the state (absent < present < correct)
         if (!currentState) {
           newLetterStates[letter] = newState;
         } else if (currentState === 'absent' && (newState === 'present' || newState === 'correct')) {
@@ -128,13 +118,11 @@ export const useWordGame = () => {
     });
   }, []);
 
-  // Submit the current attempt
   const submitAttempt = useCallback(() => {
     if (gameState.gameStatus !== 'playing') return;
     
     const attempt = gameState.currentAttempt.toLowerCase();
     
-    // Check if the attempt is 5 characters
     if (attempt.length !== 5) {
       setGameState(prev => ({
         ...prev,
@@ -143,7 +131,6 @@ export const useWordGame = () => {
       return;
     }
     
-    // Check if the attempt is a valid word
     if (!isValidWord(attempt)) {
       setGameState(prev => ({
         ...prev,
@@ -152,7 +139,6 @@ export const useWordGame = () => {
       return;
     }
     
-    // Check if the word has already been used
     if (gameState.attempts.includes(attempt)) {
       setGameState(prev => ({
         ...prev,
@@ -161,18 +147,14 @@ export const useWordGame = () => {
       return;
     }
     
-    // Evaluate the attempt
     const evaluation = evaluateAttempt(attempt, gameState.targetWord);
     updateLetterStates(attempt, evaluation);
     
-    // Update game state
     setGameState(prev => {
       const newAttempts = [...prev.attempts, attempt];
       const newEvaluations = [...prev.evaluations, evaluation];
       
-      // Check if the player won
       const hasWon = attempt === prev.targetWord;
-      // Check if the player lost
       const hasLost = !hasWon && newAttempts.length >= prev.maxAttempts;
       
       let newGameStatus = prev.gameStatus;
@@ -180,13 +162,13 @@ export const useWordGame = () => {
       if (hasWon) {
         newGameStatus = 'won';
         toast({
-          title: "Tebrikler! 🎉",
+          title: "TEBRİKLER KAZANDIN! 🎉",
           description: `Doğru kelimeyi buldunuz: ${prev.targetWord.toUpperCase()}`,
         });
       } else if (hasLost) {
         newGameStatus = 'lost';
         toast({
-          title: "Üzgünüz! 😞",
+          title: "ÜZGÜNÜM KAYBETTİN! 😞",
           description: `Doğru kelime: ${prev.targetWord.toUpperCase()} idi.`,
           variant: "destructive",
         });
@@ -203,7 +185,6 @@ export const useWordGame = () => {
     });
   }, [gameState, evaluateAttempt, updateLetterStates]);
 
-  // Handle keyboard input
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (gameState.gameStatus !== 'playing') return;
