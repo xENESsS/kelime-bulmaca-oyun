@@ -14,8 +14,7 @@ interface GameHeaderProps {
 const GameHeader: React.FC<GameHeaderProps> = ({ 
   onNewGame, 
   attemptsLeft,
-  gameStatus,
-  targetWord
+  gameStatus
 }) => {
   return (
     <header className="p-4 flex flex-col md:flex-row justify-between items-center border-b gap-2">
@@ -41,20 +40,6 @@ const GameHeader: React.FC<GameHeaderProps> = ({
         {gameStatus === 'playing' && (
           <div className="text-sm font-medium">
             {attemptsLeft} Hak
-          </div>
-        )}
-        
-        {gameStatus === 'won' && (
-          <div className="text-sm font-medium text-green-600 font-bold flex items-center gap-1">
-            <span>TEBRİKLER KAZANDIN!</span>
-            {targetWord && <span className="uppercase">({targetWord})</span>}
-          </div>
-        )}
-        
-        {gameStatus === 'lost' && (
-          <div className="text-sm font-medium text-red-600 font-bold flex items-center gap-1">
-            <span>ÜZGÜNÜM KAYBETTİN!</span>
-            {targetWord && <span className="uppercase">({targetWord})</span>}
           </div>
         )}
       </div>

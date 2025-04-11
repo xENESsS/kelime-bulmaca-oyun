@@ -34,7 +34,6 @@ const GamePage = () => {
         onNewGame={startNewGame}
         attemptsLeft={attemptsLeft}
         gameStatus={gameStatus}
-        targetWord={targetWord}
       />
       
       <main className="flex-1 flex flex-col items-center justify-between max-w-md mx-auto w-full">
@@ -52,7 +51,17 @@ const GamePage = () => {
             evaluations={evaluations}
           />
           
-          {/* Removing this alert since we're now showing the target word in the header */}
+          {/* Game Status Message - Placed between board and keyboard */}
+          {gameStatus !== 'playing' && (
+            <div className={`mx-auto text-center my-4 font-bold ${gameStatus === 'won' ? 'text-green-600' : 'text-red-600'}`}>
+              <div className="flex items-center justify-center gap-2 text-lg">
+                <span>
+                  {gameStatus === 'won' ? 'TEBRİKLER KAZANDIN!' : 'ÜZGÜNÜM KAYBETTİN!'}
+                </span>
+                {targetWord && <span className="uppercase">({targetWord})</span>}
+              </div>
+            </div>
+          )}
         </div>
         
         <div className="w-full mt-auto">
