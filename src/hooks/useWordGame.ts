@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { getRandomWord, isValidWord } from '../data/words';
 import { toast } from '@/components/ui/use-toast';
@@ -22,7 +23,7 @@ export const useWordGame = () => {
     attempts: [],
     letterStates: {},
     gameStatus: 'playing',
-    maxAttempts: 5,
+    maxAttempts: 6, // Changed from 5 to 6
     error: null,
     evaluations: [],
   });
@@ -41,7 +42,7 @@ export const useWordGame = () => {
       attempts: [],
       letterStates: {},
       gameStatus: 'playing',
-      maxAttempts: 5,
+      maxAttempts: 6, // Changed from 5 to 6
       error: null,
       evaluations: [],
     });
