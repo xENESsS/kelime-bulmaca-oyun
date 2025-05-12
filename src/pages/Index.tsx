@@ -54,11 +54,16 @@ const GamePage = () => {
           {/* Game Status Message - Placed between board and keyboard */}
           {gameStatus !== 'playing' && (
             <div className={`mx-auto text-center my-4 font-bold ${gameStatus === 'won' ? 'text-green-600' : 'text-red-600'}`}>
-              <div className="flex items-center justify-center gap-2 text-lg">
+              <div className="flex flex-col items-center justify-center gap-1 text-lg">
                 <span>
                   {gameStatus === 'won' ? 'TEBRİKLER KAZANDIN!' : 'ÜZGÜNÜM KAYBETTİN!'}
                 </span>
-                {targetWord && <span className="uppercase">({targetWord})</span>}
+                {targetWord && (
+                  <div className="mt-1">
+                    {gameStatus === 'lost' && <span className="font-medium">DOĞRU KELİME: </span>}
+                    <span className="uppercase font-bold">{targetWord}</span>
+                  </div>
+                )}
               </div>
             </div>
           )}
