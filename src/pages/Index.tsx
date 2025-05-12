@@ -5,6 +5,7 @@ import GameBoard from '@/components/GameBoard';
 import Keyboard from '@/components/Keyboard';
 import GameHeader from '@/components/GameHeader';
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 const GamePage = () => {
   const { 
@@ -63,6 +64,15 @@ const GamePage = () => {
                     {gameStatus === 'lost' && <span className="font-medium">DOĞRU KELİME: </span>}
                     <span className="uppercase font-bold">{targetWord}</span>
                   </div>
+                )}
+                {gameStatus === 'lost' && (
+                  <Button 
+                    onClick={startNewGame} 
+                    variant="outline" 
+                    className="mt-3 bg-red-100 hover:bg-red-200 border-red-300 text-red-700"
+                  >
+                    YENİDEN DENE
+                  </Button>
                 )}
               </div>
             </div>

@@ -1,7 +1,5 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { RefreshCw } from 'lucide-react';
 import GameInstructions from './GameInstructions';
 
 interface GameHeaderProps {
@@ -12,7 +10,6 @@ interface GameHeaderProps {
 }
 
 const GameHeader: React.FC<GameHeaderProps> = ({ 
-  onNewGame, 
   attemptsLeft,
   gameStatus
 }) => {
@@ -27,16 +24,6 @@ const GameHeader: React.FC<GameHeaderProps> = ({
       </h1>
       
       <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={onNewGame}
-          className="rounded-full"
-        >
-          <RefreshCw className="h-5 w-5" />
-          <span className="sr-only">Yeni Oyun</span>
-        </Button>
-        
         {gameStatus === 'playing' && (
           <div className="text-sm font-medium">
             {attemptsLeft} Hak
