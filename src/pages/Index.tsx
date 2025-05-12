@@ -6,6 +6,7 @@ import Keyboard from '@/components/Keyboard';
 import GameHeader from '@/components/GameHeader';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const GamePage = () => {
   const { 
@@ -28,6 +29,7 @@ const GamePage = () => {
   } = gameState;
 
   const attemptsLeft = maxAttempts - attempts.length;
+  const isMobile = useIsMobile();
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -37,7 +39,7 @@ const GamePage = () => {
         gameStatus={gameStatus}
       />
       
-      <main className="flex-1 flex flex-col items-center justify-between max-w-md mx-auto w-full">
+      <main className={`flex-1 flex flex-col items-center justify-between max-w-md mx-auto w-full ${isMobile ? 'pb-40' : ''}`}>
         <div className="w-full">
           {error && (
             <Alert variant="destructive" className="mt-4 mx-4 animate-shake">
@@ -90,7 +92,7 @@ const GamePage = () => {
         </div>
       </main>
       
-      <footer className="py-4 text-center text-sm text-gray-500">
+      <footer className={`py-4 text-center text-sm text-gray-500 ${isMobile ? 'pb-16' : ''}`}>
         <p>© 2025 Kelime Bulmaca Oyunu - Türkçe Wordle Benzeri Oyun</p>
       </footer>
     </div>

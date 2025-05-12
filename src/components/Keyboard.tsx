@@ -2,6 +2,7 @@
 import React from 'react';
 import { LetterState } from '@/hooks/useWordGame';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface KeyboardProps {
   onKeyPress: (key: string) => void;
@@ -31,13 +32,19 @@ const KeyboardKey: React.FC<{
   state?: LetterState;
   wide?: boolean;
   disabled?: boolean;
-}> = ({ value, display, onClick, state, wide = false, disabled = false }) => {
+  isMobile?: boolean;
+}> = ({ value, display, onClick, state, wide = false, disabled = false, isMobile = false }) => {
   return (
     <button
       type="button"
       className={cn(
-        "min-w-10 h-12 sm:h-14 md:h-14 flex items-center justify-center rounded-md border-2 font-medium transition-colors",
-        wide ? "sm:min-w-16 md:min-w-20" : "sm:min-w-10 md:min-w-12",
+        "flex items-center justify-center rounded-md border-2 font-medium transition-colors",
+        isMobile 
+          ? "min-w-8 h-11 text-sm" // Mobile styles
+          : "min-w-10 h-12 sm:h-14 md:h-14", // Desktop styles
+        wide 
+          ? (isMobile ? "min-w-14" : "sm:min-w-16 md:min-w-20") 
+          : (isMobile ? "" : "sm:min-w-10 md:min-w-12"),
         getStateClass(state),
         disabled && "opacity-50 cursor-not-allowed"
       )}
@@ -56,6 +63,8 @@ const Keyboard: React.FC<KeyboardProps> = ({
   letterStates,
   disabled = false
 }) => {
+  const isMobile = useIsMobile();
+  
   const rows = [
     ['e', 'r', 't', 'y', 'u', 'ı', 'o', 'p', 'ğ', 'ü'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ş', 'i'],
@@ -63,19 +72,20 @@ const Keyboard: React.FC<KeyboardProps> = ({
   ];
 
   return (
-    <div className="p-1 md:p-2 mb-4 max-w-lg mx-auto">
+    <div className={`p-1 md:p-2 mb-4 max-w-lg mx-auto ${isMobile ? 'fixed bottom-0 left-0 right-0 bg-gray-50 pb-2 pt-1 border-t border-gray-200' : ''}`}>
       {rows.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex justify-center gap-1 md:gap-2 mb-1 md:mb-2">
+        <div key={rowIndex} className={`flex justify-center ${isMobile ? 'gap-0.5' : 'gap-1 md:gap-2'} mb-1 md:mb-2`}>
           {row.map((key) => {
             if (key === 'enter') {
               return (
                 <KeyboardKey
                   key={key}
                   value={key}
-                  display="Gönder"
+                  display={isMobile ? "✓" : "Gönder"}
                   onClick={onEnter}
                   wide={true}
                   disabled={disabled}
+                  isMobile={isMobile}
                 />
               );
             } else if (key === 'backspace') {
@@ -87,6 +97,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
                   onClick={onBackspace}
                   wide={true}
                   disabled={disabled}
+                  isMobile={isMobile}
                 />
               );
             } else {
@@ -97,6 +108,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
                   state={letterStates[key]}
                   onClick={() => onKeyPress(key)}
                   disabled={disabled}
+                  isMobile={isMobile}
                 />
               );
             }
