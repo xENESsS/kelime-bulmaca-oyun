@@ -65,10 +65,11 @@ const Keyboard: React.FC<KeyboardProps> = ({
 }) => {
   const isMobile = useIsMobile();
   
+  // Updated to QWERTY layout
   const rows = [
-    ['e', 'r', 't', 'y', 'u', 'ı', 'o', 'p', 'ğ', 'ü'],
-    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ş', 'i'],
-    ['enter', 'z', 'c', 'ç', 'v', 'b', 'n', 'm', 'ö', 'backspace']
+    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+    ['enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'backspace']
   ];
 
   return (
