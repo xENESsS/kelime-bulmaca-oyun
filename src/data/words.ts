@@ -4600,8 +4600,6 @@ const words = [
 "falso",
 "hissi",
 "bohem",
-"		],
-"		Ta = [
 "abacı",
 "abadi",
 "abalı",
