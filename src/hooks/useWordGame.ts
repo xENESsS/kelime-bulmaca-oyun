@@ -1,217 +1,120 @@
+import React from 'react';
+import { useWordGame } from '@/hooks/useWordGame';
 
-import { useState, useEffect, useCallback } from 'react';
-import { getRandomWord, isValidWord } from '../data/words';
-import { toast } from '@/components/ui/use-toast';
-
-export type LetterState = 'correct' | 'present' | 'absent' | 'empty';
-
-export interface GameState {
-  targetWord: string;
-  currentAttempt: string;
-  attempts: string[];
-  letterStates: Record<string, LetterState>;
-  gameStatus: 'playing' | 'won' | 'lost';
-  maxAttempts: number;
-  error: string | null;
-  evaluations: LetterState[][];
-}
-
-export const useWordGame = () => {
-  const [gameState, setGameState] = useState<GameState>({
-    targetWord: '',
-    currentAttempt: '',
-    attempts: [],
-    letterStates: {},
-    gameStatus: 'playing',
-    maxAttempts: 6, // Changed from 5 to 6
-    error: null,
-    evaluations: [],
-  });
-
-  useEffect(() => {
-    startNewGame();
-  }, []);
-
-  const startNewGame = useCallback(() => {
-    const newTargetWord = getRandomWord();
-    console.log('Target word:', newTargetWord);
-
-    setGameState({
-      targetWord: newTargetWord,
-      currentAttempt: '',
-      attempts: [],
-      letterStates: {},
-      gameStatus: 'playing',
-      maxAttempts: 6, // Changed from 5 to 6
-      error: null,
-      evaluations: [],
-    });
-  }, []);
-
-  const addCharacter = useCallback((char: string) => {
-    if (gameState.gameStatus !== 'playing') return;
-    if (gameState.currentAttempt.length >= 5) return;
-
-    setGameState((prev) => ({
-      ...prev,
-      currentAttempt: prev.currentAttempt + char.toLowerCase(),
-      error: null,
-    }));
-  }, [gameState.gameStatus, gameState.currentAttempt]);
-
-  const removeCharacter = useCallback(() => {
-    if (gameState.gameStatus !== 'playing') return;
-    if (gameState.currentAttempt.length === 0) return;
-
-    setGameState((prev) => ({
-      ...prev,
-      currentAttempt: prev.currentAttempt.slice(0, -1),
-      error: null,
-    }));
-  }, [gameState.gameStatus, gameState.currentAttempt]);
-
-  const evaluateAttempt = useCallback((attempt: string, targetWord: string): LetterState[] => {
-    const result: LetterState[] = Array(5).fill('absent');
-    const targetLetters = targetWord.split('');
-    const attemptLetters = attempt.split('');
-    
-    for (let i = 0; i < 5; i++) {
-      if (attemptLetters[i] === targetLetters[i]) {
-        result[i] = 'correct';
-        targetLetters[i] = '#';
-      }
-    }
-    
-    for (let i = 0; i < 5; i++) {
-      if (result[i] === 'absent') {
-        const targetIndex = targetLetters.indexOf(attemptLetters[i]);
-        if (targetIndex !== -1) {
-          result[i] = 'present';
-          targetLetters[targetIndex] = '#';
-        }
-      }
-    }
-    
-    return result;
-  }, []);
-
-  const updateLetterStates = useCallback((attempt: string, evaluation: LetterState[]) => {
-    setGameState((prev) => {
-      const newLetterStates = { ...prev.letterStates };
-      
-      attempt.split('').forEach((letter, index) => {
-        const currentState = newLetterStates[letter];
-        const newState = evaluation[index];
-        
-        if (!currentState) {
-          newLetterStates[letter] = newState;
-        } else if (currentState === 'absent' && (newState === 'present' || newState === 'correct')) {
-          newLetterStates[letter] = newState;
-        } else if (currentState === 'present' && newState === 'correct') {
-          newLetterStates[letter] = newState;
-        }
-      });
-      
-      return {
-        ...prev,
-        letterStates: newLetterStates,
-      };
-    });
-  }, []);
-
-  const submitAttempt = useCallback(() => {
-    if (gameState.gameStatus !== 'playing') return;
-    
-    const attempt = gameState.currentAttempt.toLowerCase();
-    
-    if (attempt.length !== 5) {
-      setGameState(prev => ({
-        ...prev,
-        error: "Kelime 5 harfli olmalıdır!"
-      }));
-      return;
-    }
-    
-    if (!isValidWord(attempt)) {
-      setGameState(prev => ({
-        ...prev,
-        error: "Geçerli bir kelime değil!"
-      }));
-      return;
-    }
-    
-    if (gameState.attempts.includes(attempt)) {
-      setGameState(prev => ({
-        ...prev,
-        error: "Bu kelimeyi zaten denediniz!"
-      }));
-      return;
-    }
-    
-    const evaluation = evaluateAttempt(attempt, gameState.targetWord);
-    updateLetterStates(attempt, evaluation);
-    
-    setGameState(prev => {
-      const newAttempts = [...prev.attempts, attempt];
-      const newEvaluations = [...prev.evaluations, evaluation];
-      
-      const hasWon = attempt === prev.targetWord;
-      const hasLost = !hasWon && newAttempts.length >= prev.maxAttempts;
-      
-      let newGameStatus = prev.gameStatus;
-      
-      if (hasWon) {
-        newGameStatus = 'won';
-        toast({
-          title: "TEBRİKLER KAZANDIN! 🎉",
-          description: `Doğru kelimeyi buldunuz: ${prev.targetWord.toUpperCase()}`,
-        });
-      } else if (hasLost) {
-        newGameStatus = 'lost';
-        toast({
-          title: "ÜZGÜNÜM KAYBETTİN! 😞",
-          description: `Doğru kelime: ${prev.targetWord.toUpperCase()} idi.`,
-          variant: "destructive",
-        });
-      }
-      
-      return {
-        ...prev,
-        attempts: newAttempts,
-        evaluations: newEvaluations,
-        currentAttempt: '',
-        gameStatus: newGameStatus,
-        error: null,
-      };
-    });
-  }, [gameState, evaluateAttempt, updateLetterStates]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (gameState.gameStatus !== 'playing') return;
-      
-      const key = e.key.toLowerCase();
-      
-      if (key === 'enter') {
-        submitAttempt();
-      } else if (key === 'backspace') {
-        removeCharacter();
-      } else if (/^[a-zçğıöşü]$/.test(key)) {
-        addCharacter(key);
-      }
-    };
-    
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [gameState.gameStatus, addCharacter, removeCharacter, submitAttempt]);
-
-  return {
+const GameBoard = () => {
+  const {
     gameState,
     addCharacter,
     removeCharacter,
     submitAttempt,
     startNewGame,
+  } = useWordGame();
+
+  // Her bir denemeyi kutucuk olarak gösteren fonksiyon
+  const renderAttempts = () => {
+    const rows = [];
+
+    for (let i = 0; i < gameState.maxAttempts; i++) {
+      const word = gameState.attempts[i] || '';
+      const evaluation = gameState.evaluations[i] || [];
+
+      const boxes = [];
+
+      for (let j = 0; j < 5; j++) {
+        const letter = word[j] || '';
+        const state = evaluation[j] || 'empty';
+
+        let bgColor = 'bg-gray-200';
+        if (state === 'correct') bgColor = 'bg-green-500 text-white';
+        else if (state === 'present') bgColor = 'bg-yellow-400 text-white';
+        else if (state === 'absent') bgColor = 'bg-gray-400 text-white';
+
+        boxes.push(
+          <div
+            key={j}
+            className={`w-12 h-12 border rounded flex items-center justify-center text-xl font-bold ${bgColor}`}
+          >
+            {letter.toUpperCase()}
+          </div>
+        );
+      }
+
+      rows.push(
+        <div key={i} className="flex gap-2">
+          {boxes}
+        </div>
+      );
+    }
+
+    return rows;
   };
+
+  // Klavyeyi manuel çiz (isteğe bağlı - gerçek Keyboard.tsx varsa orayı da kullanabilirsin)
+  const handleKeyPress = (char: string) => {
+    if (char === 'ENTER') submitAttempt();
+    else if (char === 'BACK') removeCharacter();
+    else addCharacter(char);
+  };
+
+  const keyboardRows = [
+    ['E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+    ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'BACK', 'ENTER'],
+  ];
+
+  return (
+    <div className="flex flex-col items-center p-6 gap-4">
+      <h1 className="text-2xl font-bold">Kelime Bulmaca Oyunu</h1>
+
+      {/* Oyun Kutuları */}
+      <div className="flex flex-col gap-2">{renderAttempts()}</div>
+
+      {/* Hata mesajı */}
+      {gameState.error && (
+        <p className="text-red-500 font-medium">{gameState.error}</p>
+      )}
+
+      {/* Kazanma & Kaybetme mesajı */}
+      {gameState.gameStatus === 'won' && (
+        <p className="text-green-500 font-semibold mt-2">
+          🎉 Tebrikler! Doğru kelimeyi buldunuz!
+        </p>
+      )}
+      {gameState.gameStatus === 'lost' && (
+        <p className="text-red-500 font-semibold mt-2">
+          😞 Üzgünüz, doğru kelime <strong>{gameState.targetWord.toUpperCase()}</strong> idi.
+        </p>
+      )}
+
+      {/* Yeniden Oyna Butonu */}
+      {gameState.gameStatus !== 'playing' && (
+        <button
+          onClick={startNewGame}
+          className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+        >
+          🔁 Yeniden Oyna
+        </button>
+      )}
+
+      {/* Klavye */}
+      <div className="flex flex-col gap-2 mt-4">
+        {keyboardRows.map((row, rowIndex) => (
+          <div key={rowIndex} className="flex gap-2">
+            {row.map((key) => (
+              <button
+                key={key}
+                onClick={() => handleKeyPress(key === 'BACK' ? 'BACK' : key === 'ENTER' ? 'ENTER' : key.toLowerCase())}
+                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-sm font-semibold"
+              >
+                {key}
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
+
+export default GameBoard;
+
