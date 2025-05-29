@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LetterState } from '@/hooks/useWordGame';
 import { cn } from '@/lib/utils';
@@ -13,13 +12,13 @@ interface GameBoardProps {
 const getStateColor = (state: LetterState) => {
   switch (state) {
     case 'correct':
-      return 'bg-game-correct border-green-300';
+      return 'bg-game-correct border-green-300 dark:bg-green-700 dark:border-green-600 dark:text-white';
     case 'present':
-      return 'bg-game-present border-yellow-300';
+      return 'bg-game-present border-yellow-300 dark:bg-yellow-700 dark:border-yellow-600 dark:text-white';
     case 'absent':
-      return 'bg-game-absent border-gray-300';
+      return 'bg-game-absent border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white';
     default:
-      return 'bg-white border-gray-300';
+      return 'bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-600 dark:text-white';
   }
 };
 
@@ -33,7 +32,7 @@ const LetterTile: React.FC<{
     <div
       className={cn(
         "w-14 h-14 md:w-16 md:h-16 flex items-center justify-center border-2 rounded-md font-bold text-2xl uppercase transition-all",
-        isRevealed ? getStateColor(state) : "bg-white border-gray-300",
+        isRevealed ? getStateColor(state) : "bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-600 dark:text-white",
         isRevealed && "animate-flip",
         !isRevealed && letter && "animate-pop"
       )}

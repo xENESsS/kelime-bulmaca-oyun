@@ -20,18 +20,18 @@ const GameHeader: React.FC<GameHeaderProps> = ({
 
   return (
     <>
-      <header className="p-4 flex flex-col md:flex-row justify-between items-center border-b gap-2">
+      <header className="p-4 flex flex-col md:flex-row justify-between items-center border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 gap-2">
         <div className="flex items-center">
           <GameInstructions />
         </div>
         
-        <h1 className="text-2xl md:text-3xl font-bold text-game-primary">
+        <h1 className="text-2xl md:text-3xl font-bold text-game-primary dark:text-game-light">
           Kelime Bulmaca
         </h1>
         
         <div className="flex items-center gap-2">
           {gameStatus === 'playing' && (
-            <div className="text-sm font-medium">
+            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
               {attemptsLeft} Hak
             </div>
           )}
@@ -39,7 +39,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({
             variant="outline"
             size="icon"
             onClick={() => setIsSettingsOpen(true)}
-            className="ml-2"
+            className="ml-2 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             <Settings className="h-4 w-4" />
           </Button>

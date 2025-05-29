@@ -32,7 +32,7 @@ const GamePage = () => {
   const isMobile = useIsMobile();
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       <GameHeader 
         onNewGame={startNewGame}
         attemptsLeft={attemptsLeft}
@@ -56,7 +56,7 @@ const GamePage = () => {
           
           {/* Game Status Message - Placed between board and keyboard */}
           {gameStatus !== 'playing' && (
-            <div className={`mx-auto text-center my-4 font-bold ${gameStatus === 'won' ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`mx-auto text-center my-4 font-bold ${gameStatus === 'won' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
               <div className="flex flex-col items-center justify-center gap-1 text-lg">
                 <span>
                   {gameStatus === 'won' ? 'TEBRİKLER KAZANDIN!' : 'ÜZGÜNÜM KAYBETTİN!'}
@@ -67,15 +67,17 @@ const GamePage = () => {
                     <span className="uppercase font-bold">{targetWord}</span>
                   </div>
                 )}
-                {gameStatus === 'lost' && (
-                  <Button 
-                    onClick={startNewGame} 
-                    variant="outline" 
-                    className="mt-3 bg-red-100 hover:bg-red-200 border-red-300 text-red-700"
-                  >
-                    YENİDEN DENE
-                  </Button>
-                )}
+                <Button 
+                  onClick={startNewGame} 
+                  variant="outline" 
+                  className={`mt-3 ${
+                    gameStatus === 'won' 
+                      ? 'bg-green-100 hover:bg-green-200 border-green-300 text-green-700 dark:bg-green-900 dark:hover:bg-green-800 dark:border-green-700 dark:text-green-100'
+                      : 'bg-red-100 hover:bg-red-200 border-red-300 text-red-700 dark:bg-red-900 dark:hover:bg-red-800 dark:border-red-700 dark:text-red-100'
+                  }`}
+                >
+                  YENİDEN OYNA
+                </Button>
               </div>
             </div>
           )}
@@ -92,7 +94,7 @@ const GamePage = () => {
         </div>
       </main>
       
-      <footer className={`py-4 text-center text-sm text-gray-500 ${isMobile ? 'pb-16' : ''}`}>
+      <footer className={`py-4 text-center text-sm text-gray-500 dark:text-gray-400 ${isMobile ? 'pb-16' : ''}`}>
         <p>© 2025 Kelime Bulmaca Oyunu - Türkçe Wordle Benzeri Oyun</p>
       </footer>
     </div>
