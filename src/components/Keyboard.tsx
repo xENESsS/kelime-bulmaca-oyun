@@ -19,7 +19,7 @@ const getStateClass = (state?: LetterState) => {
     case 'present':
       return 'bg-game-present text-yellow-700 border-yellow-300';
     case 'absent':
-      return 'bg-game-absent text-gray-500 border-gray-300';
+      return 'bg-gray-400 text-gray-100 border-gray-500';
     default:
       return 'bg-gray-100 hover:bg-gray-200 active:bg-gray-300 border-gray-300';
   }
@@ -65,11 +65,11 @@ const Keyboard: React.FC<KeyboardProps> = ({
 }) => {
   const isMobile = useIsMobile();
   
-  // Updated to QWERTY layout
+  // Türkçe klavye düzeni
   const rows = [
-    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-    ['enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'backspace']
+    ['e', 'r', 't', 'y', 'u', 'ı', 'o', 'p', 'ğ', 'ü'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ş', 'i'],
+    ['enter', 'z', 'c', 'v', 'b', 'n', 'm', 'ö', 'ç', 'backspace']
   ];
 
   return (
