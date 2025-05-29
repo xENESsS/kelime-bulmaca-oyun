@@ -63,9 +63,9 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Game specific colors
-				"game-correct": "#F2FCE2",      // Soft green for correct letter and position
-				"game-present": "#FEF7CD",      // Soft yellow for correct letter, wrong position
+				// Game specific colors - updated for better visibility
+				"game-correct": "#E8F5E8",      // More vibrant green for correct letter and position
+				"game-present": "#FFF3CD",      // More vibrant yellow for correct letter, wrong position
 				"game-absent": "#F1F0FB",       // Soft gray for incorrect letter
 				"game-primary": "#9b87f5",      // Primary purple for design elements
 				"game-light": "#D6BCFA",        // Light purple for accents

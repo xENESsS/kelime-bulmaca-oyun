@@ -15,13 +15,13 @@ interface KeyboardProps {
 const getStateClass = (state?: LetterState) => {
   switch (state) {
     case 'correct':
-      return 'bg-game-correct text-green-700 border-green-300';
+      return 'bg-green-100 text-green-800 border-green-400 dark:bg-green-900 dark:text-green-100 dark:border-green-700';
     case 'present':
-      return 'bg-game-present text-yellow-700 border-yellow-300';
+      return 'bg-yellow-100 text-yellow-800 border-yellow-400 dark:bg-yellow-900 dark:text-yellow-100 dark:border-yellow-700';
     case 'absent':
-      return 'bg-gray-400 text-gray-100 border-gray-500';
+      return 'bg-gray-400 text-gray-100 border-gray-500 dark:bg-gray-600 dark:text-gray-200 dark:border-gray-700';
     default:
-      return 'bg-gray-100 hover:bg-gray-200 active:bg-gray-300 border-gray-300';
+      return 'bg-gray-100 hover:bg-gray-200 active:bg-gray-300 border-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:border-gray-600';
   }
 };
 
