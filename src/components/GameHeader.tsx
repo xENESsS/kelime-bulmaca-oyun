@@ -4,6 +4,7 @@ import { Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import GameInstructions from './GameInstructions';
 import SettingsModal from './SettingsModal';
+import UserAvatar from './UserAvatar';
 
 interface GameHeaderProps {
   onNewGame: () => void;
@@ -35,6 +36,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({
               {attemptsLeft} Hak
             </div>
           )}
+          <UserAvatar />
           <Button
             variant="outline"
             size="icon"

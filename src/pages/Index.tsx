@@ -4,11 +4,14 @@ import { useWordGame } from '@/hooks/useWordGame';
 import GameBoard from '@/components/GameBoard';
 import Keyboard from '@/components/Keyboard';
 import GameHeader from '@/components/GameHeader';
+import AuthPage from '@/components/AuthPage';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from '@/contexts/AuthContext';
 
 const GamePage = () => {
+  const { user, loading } = useAuth();
   const { 
     gameState, 
     addCharacter, 
@@ -30,6 +33,20 @@ const GamePage = () => {
 
   const attemptsLeft = maxAttempts - attempts.length;
   const isMobile = useIsMobile();
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-lg">Yükleniyor...</div>
+      </div>
+    );
+  }
+
+  // Show auth page if user is not authenticated
+  if (!user) {
+    return <AuthPage />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
